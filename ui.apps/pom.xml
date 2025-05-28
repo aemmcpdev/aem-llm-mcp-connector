@@ -7,7 +7,7 @@
     <artifactId>aem-llm-connector</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>core</artifactId>
-  <packaging>bundle</packaging>
-  <name>AEM LLM Connector :: core</name>
+  <artifactId>ui.apps</artifactId>
+  <packaging>content-package</packaging>
+  <name>AEM LLM Connector :: ui.apps</name>
 </project>
