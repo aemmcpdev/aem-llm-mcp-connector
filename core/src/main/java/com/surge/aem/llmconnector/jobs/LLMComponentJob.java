@@ -19,7 +19,7 @@ public class LLMComponentJob extends JobImpl {
     public void buildProcess(ProcessInstance instance, ResourceResolver resolver) throws Exception {
         instance.defineCriticalAction("Parse and Create Components", rr -> {
             InputStream inputStream = getClass().getResourceAsStream("/llm-prompt.json");
-            String jsonText = new Scanner(inputStream, "UTF-8").useDelimiter("\\A").next();
+            String jsonText = new Scanner(inputStream, "UTF-8").useDelimiter("\A").next();
             JSONArray components = new JSONArray(jsonText);
 
             for (int i = 0; i < components.length(); i++) {

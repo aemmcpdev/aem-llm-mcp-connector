@@ -8,6 +8,7 @@ import org.apache.sling.api.resource.PersistenceException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import javax.jcr.Node;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,18 +23,17 @@ public class ComponentBuilderUtil {
         // Create component folder
         Resource compFolder = ResourceUtil.getOrCreateResource(resolver, basePath, "cq:Component", "nt:unstructured", true);
 
-        // Set component metadata
+        // Set title
         ModifiableValueMap vm = compFolder.adaptTo(ModifiableValueMap.class);
         if (vm != null) {
             vm.put("jcr:title", name);
             vm.put("componentGroup", "LLM Generated");
         }
 
-        // Create dialog root
+        // Create dialog
         Resource dialog = ResourceUtil.getOrCreateResource(resolver, basePath + "/cq:dialog", "nt:unstructured", null, true);
         Resource content = ResourceUtil.getOrCreateResource(resolver, dialog.getPath() + "/content", "nt:unstructured", null, true);
 
-        // Create fields inside dialog content
         for (int i = 0; i < fields.length(); i++) {
             JSONObject field = fields.getJSONObject(i);
             String fieldName = field.getString("name");
