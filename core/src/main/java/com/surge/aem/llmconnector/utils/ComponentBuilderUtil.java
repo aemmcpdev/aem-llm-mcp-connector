@@ -8,7 +8,7 @@ import org.apache.sling.api.resource.PersistenceException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import javax.jcr.Node;
+import javax.jcr.Session;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,17 +20,17 @@ public class ComponentBuilderUtil {
 
         String basePath = "/apps/llmconnector/components/" + name;
 
-        // Create component folder
+        // Create component node
         Resource compFolder = ResourceUtil.getOrCreateResource(resolver, basePath, "cq:Component", "nt:unstructured", true);
 
-        // Set title
+        // Add metadata
         ModifiableValueMap vm = compFolder.adaptTo(ModifiableValueMap.class);
         if (vm != null) {
             vm.put("jcr:title", name);
             vm.put("componentGroup", "LLM Generated");
         }
 
-        // Create dialog
+        // Create dialog structure
         Resource dialog = ResourceUtil.getOrCreateResource(resolver, basePath + "/cq:dialog", "nt:unstructured", null, true);
         Resource content = ResourceUtil.getOrCreateResource(resolver, dialog.getPath() + "/content", "nt:unstructured", null, true);
 
@@ -48,6 +48,11 @@ public class ComponentBuilderUtil {
             ResourceUtil.getOrCreateResource(resolver, content.getPath() + "/" + fieldName, props, "nt:unstructured", true);
         }
 
+        // Commit AEM nodes
         resolver.commit();
+
+        // Write HTL file to filesystem (MCP context only)
+        String absPath = System.getProperty("user.dir") + "/target/htl-output/" + name;
+        HTLWriterUtil.writeHTL(absPath, name, fields);
     }
 }

@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+      xmlns:cq="http://www.day.com/jcr/cq/1.0"
+      xmlns:htl="http://www.adobe.com/htl/1.0"
+      data-sly-use.clientLib="${'core/wcm/components/commons/site/clientlib.html'}"
+      data-sly-use.render='render.js'>
+<head>
+    <title>LLM Connector Console</title>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+    <h1>LLM Prompt Console</h1>
+
+    <form id="llmForm">
+        <textarea id="prompt" name="prompt" rows="6" cols="80"
+                  placeholder="Type your AEM component prompt here... (e.g., 'Create a hero banner with title, subtitle, image, and CTA')"></textarea><br/>
+        <button type="submit">Generate Component</button>
+    </form>
+
+    <div id="response" style="margin-top:20px; font-family:monospace;"></div>
+
+    <script>
+        document.getElementById('llmForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const prompt = document.getElementById('prompt').value;
+
+            document.getElementById('response').innerHTML = "<p>⏳ Processing...</p>";
+
+            const res = await fetch('/bin/llm/generate-component', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt: prompt })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                document.getElementById('response').innerHTML =
+                    `<p>✅ <strong>Component Created:</strong> <code>${data.componentPath}</code></p>
+                     <p><a href='/editor.html${data.previewPath}' target='_blank'>🔍 Open Component Preview</a></p>`;
+            } else {
+                const err = await res.json();
+                document.getElementById('response').innerHTML =
+                    `<p style='color:red;'>❌ Error: ${err.error}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
