@@ -1,0 +1,19 @@
+[
+  {
+    "componentName": "hero-banner",
+    "fields": [
+      {"name": "title", "type": "text"},
+      {"name": "subtitle", "type": "text"},
+      {"name": "backgroundImage", "type": "image"},
+      {"name": "cta", "type": "link"}
+    ]
+  },
+  {
+    "componentName": "testimonial-block",
+    "fields": [
+      {"name": "quote", "type": "textarea"},
+      {"name": "author", "type": "text"},
+      {"name": "image", "type": "image"}
+    ]
+  }
+]
